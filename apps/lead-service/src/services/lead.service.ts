@@ -1,4 +1,4 @@
-import { AppDataSource } from '../config/data-source';
+import { AppDataSource } from '../config/data-source'
 import { Lead } from '../entities/lead.entity';
 import { LeadStage } from '../entities/lead-stage.entity';
 import { CreateLeadDto } from '../dto/create-lead.dto';

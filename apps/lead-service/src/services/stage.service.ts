@@ -1,4 +1,4 @@
-import { AppDataSource } from '../app/data-source';
+import { AppDataSource } from '../config/data-source'
 import { LeadStage } from '../entities/lead-stage.entity';
 
 export class StageService {

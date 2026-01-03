@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import '../../styles/sidebar.css';
+import "../../styles/sidebar.css";
 
 const Sidebar = () => {
   return (
@@ -9,8 +9,8 @@ const Sidebar = () => {
       <nav className="sidebar-nav">
         <NavLink
           to="/dashboard"
-          className={({ isActive }) =>
-            isActive ? 'nav-link active' : 'nav-link'
+          className={({ isActive }: { isActive: boolean }) =>
+          isActive ? 'nav-link active' : 'nav-link'
           }
         >
           Dashboard
@@ -18,17 +18,13 @@ const Sidebar = () => {
 
         <NavLink
           to="/leads"
-          className={({ isActive }) =>
-            isActive ? 'nav-link active' : 'nav-link'
-          }
+         className={({ isActive }: { isActive: boolean }) =>
+         isActive ? 'nav-link active' : 'nav-link'
+  }
+
         >
           Leads
         </NavLink>
-
-        <NavLink to="/leads" className="nav-link">
-              Leads
-        </NavLink>
-
 
         <span className="nav-disabled">Users (coming)</span>
       </nav>

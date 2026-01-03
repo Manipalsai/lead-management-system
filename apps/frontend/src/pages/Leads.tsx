@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LEAD_STAGES } from '../constants/leadStages';
 import type { LeadStage } from '../constants/leadStages';
 import type { Lead } from '../types/lead';
 import AddLeadModal from '../components/leads/AddLeadModal';
 import '../styles/leads.css';
 
-const MOCK_LEADS: Lead[] = [
+const INITIAL_LEADS: Lead[] = [
   {
     id: '1',
     userName: 'Ravi Kumar',
@@ -28,12 +28,12 @@ const MOCK_LEADS: Lead[] = [
   },
   {
     id: '3',
-    userName: 'Varshini',
-    companyName: 'TCS',
-    contactNumber: '9123456775',
-    email: 'varshini@tcs.com',
-    firstContactedAt: '2025-01-03',
-    lastContactedAt: '2025-01-03',
+    userName: 'Sharma',
+    companyName: 'Infosys',
+    contactNumber: '9123456780',
+    email: 'anita@innocorp.com',
+    firstContactedAt: '2025-01-02',
+    lastContactedAt: '2025-01-04',
     stage: 'Lead Tracking',
   },
 ];
@@ -46,12 +46,18 @@ const formatDate = (date: string) =>
   });
 
 const Leads = () => {
+  const [leads, setLeads] = useState<Lead[]>([]);
   const [selectedStage, setSelectedStage] =
     useState<LeadStage | 'ALL'>('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const filteredLeads = MOCK_LEADS.filter((lead) => {
+  /** TEMP: load mock data (will be replaced by backend call) */
+  useEffect(() => {
+    setLeads(INITIAL_LEADS);
+  }, []);
+
+  const filteredLeads = leads.filter((lead) => {
     const matchesStage =
       selectedStage === 'ALL' || lead.stage === selectedStage;
 
@@ -71,7 +77,6 @@ const Leads = () => {
         <h2 className="page-title">Leads</h2>
 
         <div className="header-actions">
-          {/* SEARCH */}
           <input
             type="text"
             className="search-input"
@@ -80,13 +85,7 @@ const Leads = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
-          {/* STAGE FILTER */}
-          <label htmlFor="stageFilter" className="sr-only">
-            Filter leads by stage
-          </label>
-
           <select
-            id="stageFilter"
             className="stage-filter"
             value={selectedStage}
             onChange={(e) =>
@@ -101,7 +100,6 @@ const Leads = () => {
             ))}
           </select>
 
-          {/* ADD LEAD */}
           <button
             className="primary-btn"
             onClick={() => setShowAddModal(true)}
@@ -154,8 +152,8 @@ const Leads = () => {
       {showAddModal && (
         <AddLeadModal
           onClose={() => setShowAddModal(false)}
-          onSuccess={() => {
-            // next step: refetch leads from backend
+          onSuccess={(newLead) => {
+            setLeads((prev) => [newLead, ...prev]);
           }}
         />
       )}

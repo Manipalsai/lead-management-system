@@ -1,11 +1,14 @@
 import 'reflect-metadata';
+import * as dotenv from 'dotenv'
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+
 
 import leadRoutes from './routes/lead.routes';
 import stageRoutes from './routes/stage.routes';
-import { AppDataSource } from './app/data-source';
+import { AppDataSource } from './config/data-source';
+
+
 
 
 dotenv.config();
@@ -16,6 +19,7 @@ app.use(express.json());
 
 app.use('/leads', leadRoutes);
 app.use('/stages', stageRoutes);
+app.use('/leads', leadRoutes);
 app.use('/leads', leadRoutes);
 
 app.get('/health', (req: Request, res: Response) => {

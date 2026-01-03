@@ -3,7 +3,7 @@ import { createLead, getLeads } from '../controllers/lead.controller';
 
 const router = Router();
 
-router.get('/', getLeads);
 router.post('/', createLead);
+router.get('/', getLeads);
 
 export default router;

@@ -1,30 +1,41 @@
 import { useState } from 'react';
 import { LEAD_STAGES } from '../../constants/leadStages';
-import '../..//styles/leads.css';
+import type { Lead } from '../../types/lead';
+import '../../styles/leads.css';
 
-interface Props {
+interface AddLeadModalProps {
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (newLead: Lead) => void;
 }
 
-const AddLeadModal = ({ onClose, onSuccess }: Props) => {
+const AddLeadModal = ({ onClose, onSuccess }: AddLeadModalProps) => {
   const [form, setForm] = useState({
     userName: '',
     companyName: '',
     contactNumber: '',
     email: '',
     stage: LEAD_STAGES[0],
-    comments: ''
+    comments: '',
   });
 
   const handleChange = (key: string, value: string) => {
-    setForm({ ...form, [key]: value });
+    setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
-    // TEMP – backend hookup next
-    console.log('Lead payload:', form);
-    onSuccess();
+    // TEMP: frontend-only lead creation (backend next)
+    const newLead: Lead = {
+      id: crypto.randomUUID(),
+      userName: form.userName,
+      companyName: form.companyName,
+      contactNumber: form.contactNumber,
+      email: form.email,
+      stage: form.stage,
+      firstContactedAt: new Date().toISOString().split('T')[0],
+      lastContactedAt: new Date().toISOString().split('T')[0],
+    };
+
+    onSuccess(newLead);
     onClose();
   };
 
@@ -35,18 +46,25 @@ const AddLeadModal = ({ onClose, onSuccess }: Props) => {
 
         <input
           placeholder="User Name"
+          value={form.userName}
           onChange={(e) => handleChange('userName', e.target.value)}
         />
+
         <input
           placeholder="Company Name"
+          value={form.companyName}
           onChange={(e) => handleChange('companyName', e.target.value)}
         />
+
         <input
           placeholder="Contact Number"
+          value={form.contactNumber}
           onChange={(e) => handleChange('contactNumber', e.target.value)}
         />
+
         <input
           placeholder="Email"
+          value={form.email}
           onChange={(e) => handleChange('email', e.target.value)}
         />
 
@@ -63,6 +81,7 @@ const AddLeadModal = ({ onClose, onSuccess }: Props) => {
 
         <textarea
           placeholder="Comments (optional)"
+          value={form.comments}
           onChange={(e) => handleChange('comments', e.target.value)}
         />
 
