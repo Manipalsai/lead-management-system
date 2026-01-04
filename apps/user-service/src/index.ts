@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { AppDataSource } from './app/data-source';
 import userRoutes from './routes/user.routes';
+// @ts-ignore
+import * as bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -25,8 +27,28 @@ app.get('/health', (_req, res) => {
 const PORT = process.env.PORT || 4002;
 
 AppDataSource.initialize()
-  .then(() => {
+  .then(async () => {
     console.log('✅ User-service database connected');
+
+    // SEED DEFAULT USER
+    const { User } = await import('./entities/user.entity');
+    const userRepo = AppDataSource.getRepository(User);
+
+    const count = await userRepo.count();
+    if (count === 0) {
+      console.log('Seeding default admin user...');
+      const hashedPassword = await bcrypt.hash('Admin@123', 10);
+
+      const admin = userRepo.create({
+        name: 'Super Admin',
+        email: 'superadmin@lms.dev',
+        password: hashedPassword,
+        role: 'SUPER_ADMIN'
+      });
+
+      await userRepo.save(admin);
+      console.log('Default user created: superadmin@lms.dev / Admin@123');
+    }
 
     app.listen(PORT, () => {
       console.log(`🚀 User Service running on port ${PORT}`);

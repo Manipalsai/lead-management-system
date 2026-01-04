@@ -23,3 +23,6 @@ const attachToken = (config: any) => {
 authApi.interceptors.request.use(attachToken);
 userApi.interceptors.request.use(attachToken);
 leadApi.interceptors.request.use(attachToken);
+
+
+export default axios;

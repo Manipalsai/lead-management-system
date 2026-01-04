@@ -4,7 +4,7 @@ import { authApi } from '../../api/axios';
 /**
  * Types
  */
-export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'USER';
+export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'USER' | 'Super Admin' | 'Admin' | 'User';
 
 interface AuthUser {
   id: string;
@@ -25,11 +25,12 @@ interface AuthState {
  * Initial State
  */
 const tokenFromStorage = localStorage.getItem('token');
+const userFromStorage = localStorage.getItem('user');
 
 const initialState: AuthState = {
   isAuthenticated: !!tokenFromStorage, // ✅ FIX
   token: tokenFromStorage,
-  user: null,
+  user: userFromStorage ? JSON.parse(userFromStorage) : null,
   loading: false,
   error: null,
 };
@@ -65,6 +66,7 @@ const authSlice = createSlice({
       state.user = null;
       state.error = null;
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
     setAuthFromStorage(state, action) {
       state.isAuthenticated = true;
@@ -86,6 +88,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.user = action.payload.user;
         localStorage.setItem('token', action.payload.token);
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
       })
       // Login Failure
       .addCase(login.rejected, (state, action) => {

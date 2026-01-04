@@ -1,4 +1,4 @@
-import { LeadStage } from '../constants/leadStages';
+import type { LeadStage } from '../constants/leadStages';
 
 export interface Lead {
   id: string;
@@ -8,6 +8,7 @@ export interface Lead {
   email: string;
   firstContactedAt: string;
   lastContactedAt: string;
-  stage: LeadStage;
+  stage: LeadStage | { name: string };
+  title?: string;
   comments?: string;
 }

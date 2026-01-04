@@ -1,16 +1,16 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import '../../styles/dashboard.css';
 
 const AppLayout = () => {
   return (
-    <div className="app-container">
+    <div className="min-h-screen bg-gray-50 flex">
       <Sidebar />
 
-      <div className="main-section">
+      {/* Main Content Handler (pushed by sidebar 256px / 16rem) */}
+      <div className="flex-1 ml-64 flex flex-col min-h-screen transition-all duration-300">
         <Header />
-        <main className="content-area">
+        <main className="flex-1 p-8 overflow-y-auto">
           <Outlet />
         </main>
       </div>

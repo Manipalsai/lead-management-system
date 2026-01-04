@@ -20,6 +20,9 @@ export class Lead {
   @Column()
   companyName!: string;
 
+  @Column({ nullable: true })
+  title?: string;
+
   @Column()
   contactNumber!: string;
 
