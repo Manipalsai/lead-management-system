@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import leadRoutes from './routes/lead.routes';
 import stageRoutes from './routes/stage.routes';
+import todoRoutes from './routes/todo.routes';
 import { AppDataSource } from './config/data-source';
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(express.json());
 /* ──────────────── ROUTES ──────────────── */
 app.use('/leads', leadRoutes);
 app.use('/stages', stageRoutes);
+app.use('/todos', todoRoutes);
 
 app.get('/health', (_req: Request, res: Response) => {
   res.json({

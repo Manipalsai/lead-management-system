@@ -1,17 +1,44 @@
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/tensorgo-logo.png';
+import { useAppSelector } from '../../app/hooks';
 
-const Sidebar = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+  const user = useAppSelector((state) => state.auth.user);
+
+  // Helper to format role text
+  const formatRole = (role: string | undefined) => {
+    if (!role) return 'User';
+    // Handle SUPER_ADMIN -> Super Admin, etc.
+    return role
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
   return (
-    <aside className="w-64 bg-slate-900 text-white flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300">
+    <aside className={`
+      w-64 bg-slate-900 text-white flex flex-col h-screen fixed left-0 top-0 z-50 transition-transform duration-300
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
+    `}>
       {/* LOGO */}
-      <div className="h-16 flex items-center px-6 border-b border-slate-700">
+      <div className="h-16 flex items-center justify-between px-6 border-b border-slate-700">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
-            <img src={logo} alt="Logo" className="w-full h-full object-contain scale-125" />
+          <div className="w-8 h-8 flex items-center justify-center overflow-hidden">
+            {/* Scaled down slightly to fit better */}
+            <img src={logo} alt="Logo" className="w-full h-full object-contain" />
           </div>
           <span className="font-bold text-xl tracking-wide">TensorGo</span>
         </div>
+        <button className="md:hidden text-slate-400 hover:text-white" onClick={onClose}>
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
 
       {/* NAVIGATION */}
@@ -105,14 +132,15 @@ const Sidebar = () => {
 
       {/* FOOTER */}
       <div className="p-4 border-t border-slate-700">
-        {/* We can use real user data here later if needed, but for now keep static or remove if confusing */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">
-            {/* user?.name?.charAt(0) || 'U' */}
-            U
+          <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold ring-2 ring-slate-600">
+            {user?.name?.charAt(0).toUpperCase() || 'U'}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">User</p>
+            <p className="text-sm font-medium truncate text-white">{user?.name || 'User'}</p>
+            {user?.name?.toLowerCase() !== formatRole(user?.role).toLowerCase() && (
+              <p className="text-xs text-slate-400 truncate capitalize">{formatRole(user?.role)}</p>
+            )}
           </div>
         </div>
       </div>

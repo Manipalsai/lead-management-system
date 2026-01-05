@@ -1,6 +1,14 @@
 @import "tailwindcss";
 
 @layer utilities {
+  select option {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+:root {
   .animate-fade-in {
     animation: fadeIn 0.2s ease-out;
   }
